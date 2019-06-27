@@ -13,6 +13,8 @@ long_description ="Go-ICP for globally optimal 3D pointset registration.";
 
 data_dir = pkg_resources.resource_filename("autowrap", "data_files")
 include_dir = os.path.join(data_dir, "autowrap")
+include_dir_python = 'C:/Python36/include'
+library_dir_python = 'C:/Python36/libs'
 
 # if(not os.path.exists(os.path.abspath('./py_chenhancc.cpp'))):
 #     import subprocess;
@@ -30,7 +32,8 @@ ext = Extension("py_goicp",
                 extra_link_args=["-std=c++14"], #Release mode (no -g switch)
 #                 extra_compile_args=["-std=c++14", "-g"], #Debug mode (no -g switch)
 #                 extra_link_args=["-std=c++14",  "-g"], #Debug mode (no -g switch)
-                include_dirs = [include_dir, data_dir],
+                include_dirs = [include_dir, data_dir, include_dir_python],
+                library_dirs = [library_dir_python]
                )
 
 setup(cmdclass={'build_ext':build_ext},

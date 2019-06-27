@@ -27,6 +27,9 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <iostream>
 #include <vector>
 
+#include <stdint.h>
+
+/*
 #ifndef _MSC_VER
   #include <stdint.h>
 #else
@@ -39,6 +42,7 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
   typedef unsigned __int32  uint32_t;
   typedef unsigned __int64  uint64_t;
 #endif
+*/
 
 #define endll endl << endl // double end line definition
 
