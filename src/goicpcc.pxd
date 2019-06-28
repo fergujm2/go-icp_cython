@@ -36,6 +36,7 @@ cdef extern from "jly_goicp.hpp":
         float SSEThresh
         float icpThresh
         float trimFraction
+        float timeLimit
         int inlierNum
         bool doTrim
     

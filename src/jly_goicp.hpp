@@ -110,6 +110,7 @@ public:
 	void setInitNodeRot(ROTNODE &node);
 	void setInitNodeTrans(TRANSNODE &node);
 	void setDTSizeAndFactor(int size, double factor);
+  void setTimeLimitSeconds(float seconds);
 	std::vector<std::vector<double>> optimalRotation();
 	std::vector<double> optimalTranslation();
 
@@ -117,7 +118,8 @@ public:
 	float MSEThresh;
 	float SSEThresh;
 	float icpThresh;
-
+  float timeLimit;
+  
 	float optError;
 	Matrix optR;
 	Matrix optT;
@@ -208,6 +210,7 @@ GoICP::GoICP()
 	initNodeTrans.lb = 0;
 	MSEThresh = 0.001;
 	trimFraction = 0.0;
+  timeLimit = 10.0; // One billion seconds ~ 32 years.
 	doTrim = true;
 	dt.SIZE = 1;
 	dt.expandFactor = 2.0;
@@ -581,6 +584,7 @@ float GoICP::OuterBnB()
 
 	// Keep exploring rotation space until convergence is achieved
 	long long count = 0;
+  clock_t clockBeginOuterBnB = clock();
 	while(1)
 	{
 		if(queueRot.empty())
@@ -601,6 +605,15 @@ float GoICP::OuterBnB()
 			cout << "Error*: " << optError << ", LB: " << nodeRotParent.lb << ", epsilon: " << SSEThresh << endl;
 			break;
 		}
+    
+    // Exit if the computation time exceeds the user-specified limit
+    float outerBnBTime = (float)(clock() - clockBeginOuterBnB)/CLOCKS_PER_SEC;
+    if(outerBnBTime > timeLimit)
+    {
+      cout << "Execution time " << outerBnBTime << " exceeded max specified " << timeLimit << endl;
+      cout << "Error*: " << optError << ", LB: " << nodeRotParent.lb << ", epsilon: " << SSEThresh << endl;
+      break;
+    }
 
 		if(count>0 && count%300 == 0)
 			printf("LB=%f  L=%d\n",nodeRotParent.lb,nodeRotParent.l);
